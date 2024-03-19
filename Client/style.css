@@ -1,0 +1,72 @@
+#root {
+    background-color: #b31e1e;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.root {
+    background-color: #b31e1e;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#root p {
+    margin: 0;
+}
+body {
+    margin: 0;
+    background-color: green;
+}
+
+.menu {
+    width: 600px;
+    height: 500px;
+    border-radius: 15px;
+    background-color: #8f1919;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+    color: #fff;
+}
+.menu div {
+    height: 50px;
+    width: 500px;
+    border-radius: 15px;
+    border: none;
+    background-color: #b31e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-gap: 5px;
+}
+.menu div button{
+    background-color: #fff;
+    border-radius: 10px;
+    height: 25px;
+    width: 100px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+.menu div button:hover {
+    transform: scale(1.05);
+}
+.menu div input {
+    height: 25px;
+    width: 200px;
+    outline: none;
+    border: none;
+}
+.menu div input:focus {
+    border: none;
+    outline: none;
+}
+
+.teste {
+    background-color: green;
+}

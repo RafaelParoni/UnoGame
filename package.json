@@ -1,0 +1,17 @@
+{
+  "name": "unogame",
+  "version": "1.0.0",
+  "description": "Criando o jogo UNO em WEB com Socket.io, HTML5, CSS3 e Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.9",
+    "express": "^4.18.3",
+    "socket.io": "^4.7.4"
+  }
+}
