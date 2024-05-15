@@ -1,25 +1,12 @@
-#root {
-    background-color: #b31e1e;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.root {
-    background-color: #b31e1e;
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-#root p {
-    margin: 0;
-}
+
 body {
     margin: 0;
-    background-color: green;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
 }
 
 .menu {
@@ -33,17 +20,7 @@ body {
     justify-content: space-around;
     color: #fff;
 }
-.menu div {
-    height: 50px;
-    width: 500px;
-    border-radius: 15px;
-    border: none;
-    background-color: #b31e1e;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    grid-gap: 5px;
-}
+
 .menu div button{
     background-color: #fff;
     border-radius: 10px;
@@ -67,6 +44,75 @@ body {
     outline: none;
 }
 
-.teste {
-    background-color: green;
+.menuInfo {
+    height: auto;
+    padding:  10px 0 10px 0 ;
+    width: 500px;
+    border-radius: 15px;
+    border: none;
+    background-color: #b31e1e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    grid-gap: 10px;
 }
+#alertUserName{
+    display: none;
+    text-transform: uppercase;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.menu button{
+    background-color: #fff;
+    border-radius: 10px;
+    height: 25px;
+    width: 100px;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s;
+}
+.menu button:hover {
+    transform: scale(1.05);
+}
+.menu div input {
+    height: 25px;
+    width: 200px;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+}
+.menuIcons {
+    height: 70px;
+    width: 400px;
+    display: flex;
+    flex-wrap: nowrap; 
+    overflow: auto;
+    white-space: nowrap;
+    grid-gap:5px;
+}
+.menuIcons::-webkit-scrollbar {   
+    height: 10px;      
+}
+.menuIcons::-webkit-scrollbar-track {
+    background: #5f1010;        
+}
+.menuIcons::-webkit-scrollbar-thumb {
+    background-color: #b31e1e;    
+    border: 1px solid #5f1010;
+    border-radius: 10px;      
+}
+
+.icon {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    flex: 0 0 auto;
+}
+.icon img {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+

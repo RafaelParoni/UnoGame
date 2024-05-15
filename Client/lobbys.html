@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNO   SOCKET.IO</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+</head>
+<body>
+    <h1>Lobby</h1>
+</body>
+<script type="text/javascript">
+    var socket = io('http://localhost:3000')
+
+    socket.emit('searchLobbys', 'procurando lobbys disponiveis')
+
+    socket.on("disconnect", (reason) => {
+        socket.emit('clientOff', 'um usuario saiu da conexao')
+    });
+</script>
+</html>

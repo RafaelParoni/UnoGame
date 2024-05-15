@@ -4,231 +4,39 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNO   SOCKET.IO</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
 </head>
 <body>
-    <div id="root">
-        <button onclick="connections()"> USERS</button>
+    <div class="menu">
+        <img src="./UnoFavIcon.png" />
+        <div class="menuIcons">
+                    <div class="menuIcons">
+                        <div onclick="selectIcon(1)"  class="icon"> <img style="border: 2px solid #F8DA27;" id='1' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU' /></div>
+                        <div onclick="selectIcon(2)" class="icon"> <img id='2' src='https://pbs.twimg.com/media/FuhwHXxWIAU29qA.png' /></div>
+                        <div onclick="selectIcon(3)" class="icon"> <img id='3' src='https://i0.wp.com/animeprofile.com.br/wp-content/uploads/2023/02/monkey-d-luffy-animeprofile.png?resize=696%2C435&ssl=1' /></div>
+                        <div onclick="selectIcon(4)" class="icon"> <img id='4' src='https://i.pinimg.com/564x/62/8a/7d/628a7dc0acbf6b64128672d1c456f86c.jpg' /></div>
+                        <div onclick="selectIcon(5)" class="icon"> <img id='5' src='https://universocinema.com.br/wp-content/uploads/2024/02/Quem-e-Maria-Zhang-5-coisas-para-saber-sobre-a.jpg' /></div>
+                        <div onclick="selectIcon(6)" class="icon"> <img id='6' src='https://mbeck.com.br/blog/wp-content/uploads/sites/2/2018/05/gollum-the-hobbit-1200x675.jpg' /></div>
+                        <div onclick="selectIcon(7)" class="icon"> <img id='7' src='https://static1.purebreak.com.br/articles/1/77/91/@/41158--ele-e-tao-fofinho-que-eu-vou-diapo-2.jpg' /></div>
+                        <div onclick="selectIcon(8)" class="icon"> <img id='8' src='https://segredosdomundo.r7.com/wp-content/uploads/2016/08/destaque-36.jpg' /></div>
+                        <div onclick="selectIcon(9)" class="icon"> <img id='9' src='https://mega.ibxk.com.br/2022/10/21/21120721268140.jpg' /></div>
+                        <div onclick="selectIcon(10)" class="icon"> <img id='10' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo2pPLyLHdE1y3I3waZJRY4MP4JFJnXIQ5YFKRrMYo4WHg1IuV4cJ488O5SEUhW5MWM20&usqp=CAU' /></div>
+                    </div>
+        </div>
+        <div class='menuInfo'> 
+                    <b><p id='alertUserName'>Coloque um nome de usuario </p></b>
+                    <input type='text' id='username' placeholder='Username' />
+                    <button onclick="SearchLobby()"> Iniciar </button> 
+        </div>
     </div>
 </body>
-<style>
-    #root {
-        background-color: #b31e1e;
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    #root p {
-        margin: 0;
-    }
-    body {
-        margin: 0;
-        background-color: green;
-    }
-
-    .menu {
-        width: 600px;
-        height: 500px;
-        border-radius: 15px;
-        background-color: #8f1919;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: space-around;
-        color: #fff;
-    }
-    .menuInfo {
-        height: 80px;
-        width: 500px;
-        border-radius: 15px;
-        border: none;
-        background-color: #b31e1e;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        grid-gap: 10px;
-    }
-    #alertUserName{
-        display: none;
-    }
-    .menu button{
-        background-color: #fff;
-        border-radius: 10px;
-        height: 25px;
-        width: 100px;
-        cursor: pointer;
-        border: none;
-        transition: 0.2s;
-    }
-    .menu button:hover {
-        transform: scale(1.05);
-    }
-    .menu div input {
-        height: 25px;
-        width: 200px;
-        border-radius: 10px;
-        outline: none;
-        border: none;
-    }
-    .menu div input:focus {
-        border: none;
-        outline: none;
-    }
-    .menuIcons {
-        height: 70px;
-        width: 400px;
-        display: flex;
-        flex-wrap: nowrap; 
-        overflow: auto;
-        white-space: nowrap;
-        grid-gap:5px;
-    }
-    .menuIcons::-webkit-scrollbar {   
-        height: 10px;      
-    }
-    .menuIcons::-webkit-scrollbar-track {
-        background: #5f1010;        
-    }
-    .menuIcons::-webkit-scrollbar-thumb {
-        background-color: #b31e1e;    
-        border: 1px solid #5f1010;
-        border-radius: 10px;      
-    }
-    
-    .icon {
-        cursor: pointer;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        flex: 0 0 auto;
-    }
-    .icon img {
-        height: 50px;
-        width: 50px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
-
-
-
-    .menuLobby {
-        display: none;
-        width: 600px;
-        height: 500px;
-        border-radius: 15px;
-        background-color: #8f1919;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        color: #fff;
-    }
-    
-
-
-
-</style>
 <script type="text/javascript">
     var socket = io('http://localhost:3000')
     var root = document.getElementById('root')
 
-    function renderHtml(value){
-        if(value === 'reload'){
-            var d = document.getElementById("root");
-            var d_interno = document.getElementById("menu");
-            var noRemovido = d.removeChild(d_interno);
-        }
-        var path = window.location.pathname;
-        var content = document.createElement("div");
-        if(path === '/'){
-            content = document.createElement("div");
-            console.log('Inicio')
-            content.id = 'menu'
-            content.className = 'menu'
-            content.innerHTML = `
-                <img src="./UnoFavIcon.png" />
-                    <div class="menuIcons">
-                        <div class="menuIcons">
-                            <div onclick="selectIcon(1)"  class="icon"> <img style="border: 2px solid #F8DA27;" id='1' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU' /></div>
-                            <div onclick="selectIcon(2)" class="icon"> <img id='2' src='https://pbs.twimg.com/media/FuhwHXxWIAU29qA.png' /></div>
-                            <div onclick="selectIcon(3)" class="icon"> <img id='3' src='https://i0.wp.com/animeprofile.com.br/wp-content/uploads/2023/02/monkey-d-luffy-animeprofile.png?resize=696%2C435&ssl=1' /></div>
-                            <div onclick="selectIcon(4)" class="icon"> <img id='4' src='https://i.pinimg.com/564x/62/8a/7d/628a7dc0acbf6b64128672d1c456f86c.jpg' /></div>
-                            <div onclick="selectIcon(5)" class="icon"> <img id='5' src='https://universocinema.com.br/wp-content/uploads/2024/02/Quem-e-Maria-Zhang-5-coisas-para-saber-sobre-a.jpg' /></div>
-                            <div onclick="selectIcon(6)" class="icon"> <img id='6' src='https://mbeck.com.br/blog/wp-content/uploads/sites/2/2018/05/gollum-the-hobbit-1200x675.jpg' /></div>
-                            <div onclick="selectIcon(7)" class="icon"> <img id='7' src='https://static1.purebreak.com.br/articles/1/77/91/@/41158--ele-e-tao-fofinho-que-eu-vou-diapo-2.jpg' /></div>
-                            <div onclick="selectIcon(8)" class="icon"> <img id='8' src='https://segredosdomundo.r7.com/wp-content/uploads/2016/08/destaque-36.jpg' /></div>
-                            <div onclick="selectIcon(9)" class="icon"> <img id='9' src='https://mega.ibxk.com.br/2022/10/21/21120721268140.jpg' /></div>
-                            <div onclick="selectIcon(10)" class="icon"> <img id='10' src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo2pPLyLHdE1y3I3waZJRY4MP4JFJnXIQ5YFKRrMYo4WHg1IuV4cJ488O5SEUhW5MWM20&usqp=CAU' /></div>
-                        </div>
-                    </div>
-                <div class='menuInfo'> 
-                    <input type='text' id='username' placeholder='Username' />
-                    <p id='alertUserName'>Coloque um nome de usuario! </p>
-                    <button onclick="SearchLobby()"> Iniciar </button> 
-                </div>
-                    
-            `;
-            root.appendChild(content);
-
-        }else if(path ==='lobbys'){
-            content = document.createElement("div");
-            console.log('buscando lobby')
-            content.id = 'menuLobby'
-            content.className = 'menuLobby'
-            content.innerHTML = `
-                <div class="menuLobby">
-                    <h1>LOBBY</H1>
-                    <p>Codigo</p>
-                    <div class="LobbyIcons">
-                        <div class="LobbyIcons">
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                            <div class="icon"></div>
-                        </div>
-                    </div>
-                    <input type='text' placeholder='Digite seu username' maxlength="25" />
-                </div>
-            `
-           root.appendChild(content);
-
-
-            root.className = 'root'
-
-            
-        }
-    }
-
-    renderHtml()
-
-    
-
-    function SearchLobby(){
-        if(document.getElementById('username').value === ''){
-            document.getElementById('alertUserName').style.display = 'flex'
-            return
-        }
-        window.sessionStorage.setItem('username', document.getElementById('username').value)
-        socket.emit('userRegister', {
-            name: document.getElementById('username').value,
-            icon: window.sessionStorage.getItem('icon'),
-            id: window.sessionStorage.getItem('client')
-        })
-        window.history.pushState("object or string", "Title", "/lobbys/");
-        renderHtml()
-    }
 
 
     var IconSelect = 1
@@ -241,34 +49,23 @@
         IconSelect = Num
     }
 
-    function connections(){
-        socket.emit('connectionsList', 'connections')
-    }
-    socket.on('connectionsListResult', function(data){
-        console.log(data)
-    })
-
-
-    socket.on('newUser', function(data){
-        console.log('New User in the party')
-        console.log(data)
-    })
-    socket.on('serverOn', function (data) {
-        console.log('client logado')
-        if(window.sessionStorage.getItem('client') !== null){
-            console.log('Este client ja tem um login no sessinStorage')
-            socket.emit('OldClient', window.sessionStorage.getItem('client'))
+    function SearchLobby(){
+        var name = document.getElementById('username')
+        var alert = document.getElementById("alertUserName")
+        if(name.value === '' || name.value.length === 0 || name.value.length < 4){
+            console.log('NÇAO TEM NADA')
+            name.style.border = '1px solid red';
+            alert.style.display = 'flex'
+            if(name.value.length === 0){
+                alert.innerText = 'Coloque um nome de usuario'
+            }else{
+                alert.innerText = 'Coloque um nome de usuario maior!'
+            }
         }else{
-            window.sessionStorage.setItem('client', data)
-            window.sessionStorage.setItem('icon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU')
-            console.log('criando login para esta client no sessinStorage')
-            socket.emit('NewClient', data)
+            window.location = '/lobbys'
         }
+    }
 
-        socket.on('ClientConfirm', function (data){
-            console.log(`Client: ${data.Client}, Msg: ${data.msg}`)
-        })
-    });
 
     socket.on("disconnect", (reason) => {
         socket.emit('clientOff', 'um usuario saiu da conexao')
