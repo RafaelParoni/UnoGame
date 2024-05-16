@@ -11,6 +11,15 @@
 </head>
 
 <body>
+    <div style="padding: 5px; position: fixed; top: 0; left: 0; display: flex; align-items: center; justify-content: center; grid-gap: 5px;">
+        <img class="icon" style=" width: 50px; height: 50px; border-radius: 50%; flex: 0 0 auto; object-fit: cover;" id="userIcon"  alt="user icon image"/> <span style="color: #fff; font-family: monospace; font-size: 25px;" id="userName"></span>
+    </div>
+    <script>
+        var icon = window.sessionStorage.getItem("icon")
+        var name = window.sessionStorage.getItem("name")
+        document.getElementById("userName").innerHTML = name
+        document.getElementById("userIcon").setAttribute('src', icon)
+    </script>
     <main>
         <div class="options">
             <span style="font-size: 20px;">Idioma:</span>
@@ -156,6 +165,7 @@
 
 </style>
 <script type="text/javascript">
+   
     var socket = io('http://localhost:3000')
 
     socket.emit('searchLobbys', 'procurando lobbys disponiveis')

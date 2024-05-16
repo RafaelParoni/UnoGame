@@ -38,7 +38,7 @@
     var root = document.getElementById('root')
 
 
-
+    window.sessionStorage.setItem('icon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU')
     var IconSelect = 1
 
     function selectIcon(Num){
@@ -53,7 +53,7 @@
         var name = document.getElementById('username')
         var alert = document.getElementById("alertUserName")
         if(name.value === '' || name.value.length === 0 || name.value.length < 4){
-            console.log('NÇAO TEM NADA')
+            console.log('NãO TEM NADA')
             name.style.border = '1px solid red';
             alert.style.display = 'flex'
             if(name.value.length === 0){
@@ -62,6 +62,8 @@
                 alert.innerText = 'Coloque um nome de usuario maior!'
             }
         }else{
+            console.log(name.value)
+            window.sessionStorage.setItem('name', name.value)
             window.location = '/lobbys/'
         }
     }

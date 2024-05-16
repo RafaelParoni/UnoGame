@@ -6,7 +6,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: red;
+    background-color: rgb(85, 2, 2);
 }
 
 .menu {
