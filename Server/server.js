@@ -102,6 +102,38 @@ io.on('connection', socket => {
         console.log(data)
         socket.emit('lobbysResult', lobbys)
     })
+    socket.on('enterGame', function(id){
+        var result = {
+            'msg': '',
+            'stats': '',
+            'id': '',
+        }
+        var i = 0
+        while(i < lobbys.length){
+            if(lobbys[i].id === id){
+                console.log(`Players: ${lobbys[i].playetsAtivos}/${lobbys[i].playersTotal}`)
+                if(lobbys[i].playetsAtivos < lobbys[i].playersTotal){
+                    console.log('Entrando no lobby')
+                    lobbys[i].playetsAtivos = lobbys[i].playetsAtivos + 1
+                    result = {
+                        'msg': 'Entrando no lobby!',
+                        'stats': 'sucess',
+                        'id': id,
+                    }
+                    socket.emit('enterGameResult', result)
+                }else{
+                    console.log('Lobby cheio')
+                    result = {
+                        'msg': 'Lobby cheio!',
+                        'stats': 'error',
+                        'id': '???',
+                    }
+                    socket.emit('enterGameResult', result)
+                }
+            }
+            i++
+        }
+    })
     socket.on('clientOff', function(data){
         console.log(data)
     })

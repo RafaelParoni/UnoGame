@@ -180,7 +180,7 @@
                 var div = document.createElement("button");
                 div.className = `class`
                 div.onclick = function(){
-                    window.location = `/game/${id}`
+                    socket.emit('enterGame', id)
                 }
                 div.id = id
                 div.innerHTML = `<span>${salas[i].idioma}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].playetsAtivos}/${salas[i].playersTotal}</span>`;
@@ -232,7 +232,7 @@
         alert(`Criando lobby ${lobbyName} com o máximo de players ${maxPlayers}, ${lobbyTypeText} com o idioma preferido de ${lang}`)
         var lobby = {'name': lobbyName,
             'playersTotal': maxPlayers,
-            'playetsAtivos': '01',
+            'playetsAtivos': 1,
             'idioma': lang,
             'open': lobbyType,
             'id': ''}
@@ -250,13 +250,16 @@
         }
     })
 
+    socket.on('enterGameResult', function(data){
+        console.log(data)
+    })
 
     socket.on('lobbyUpdata',  function(lobby){
         var id = lobby.id
         var div = document.createElement("button");
             div.className = `class`
             div.onclick = function(){
-                window.location = `/game/${id}`
+                socket.emit('enterGame', id)
             }
             div.id = id
             div.innerHTML = `<span>${lobby.idioma}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.playetsAtivos}/${lobby.playersTotal}</span>`;
