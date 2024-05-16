@@ -97,8 +97,6 @@ io.on('connection', socket => {
             socket.broadcast.emit('lobbyUpdata', lobby)
         }
 
-
-        console.log('New lobby')
     })
     socket.on('searchLobbys', function(data){
         console.log(data)
