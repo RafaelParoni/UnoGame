@@ -175,6 +175,7 @@
         var user = {
             'name': window.sessionStorage.getItem('name'),
             'icon': window.sessionStorage.getItem("icon"),
+            'id': window.sessionStorage.getItem('id')
         }
         var i = 0 
         while(i < salas.length){
@@ -198,6 +199,7 @@
         var user = {
             'name': window.sessionStorage.getItem('name'),
             'icon': window.sessionStorage.getItem("icon"),
+            'id': window.sessionStorage.getItem('id')
         }
         var id = lobby.id
         var div = document.createElement("button");
@@ -241,24 +243,14 @@
         var user = {
             'name': window.sessionStorage.getItem('name'),
             'icon': window.sessionStorage.getItem("icon"),
+            'id': window.sessionStorage.getItem('id')
         }
         
 
         socket.emit("createLobby", lobby, user)
     }
     
-    socket.on('createLobbyResult', function(data){
-        console.log(data)
-        if(data.stats === "sucess"){
-            window.location = `/game/${data.id}`
-        }else{
-            alert("Não foi possivel criar seu lobby :c")
-        }
-    })
-    
-    socket.on("disconnect", (reason) => {
-        socket.emit('clientOff', 'um usuario saiu da conexao')
-    });
+  
 
     function visible(id, id2){
         console.log(id)
@@ -273,14 +265,7 @@
         }
     }
 
-    socket.on('enterGameResult', function(data){
-        if(data.stats === 'sucess'){
-            window.location = `/game/${data.id}`
-        }else{
-            alert(data.msg)
-        }
-    })
-
+  
   
  
 </script>

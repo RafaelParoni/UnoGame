@@ -3,9 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>UNO   SOCKET.IO</title>
+    <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
 </head>
 <body>
     <h1>Lobby Uno</h1>
 </body>
+<script>
+    var socket = io('http://localhost:3000')
+
+    var user = {
+        'name': window.sessionStorage.getItem('name'),
+        'icon': window.sessionStorage.getItem('icon'),
+        'id': window.sessionStorage.getItem('id'),
+    }
+    var GameId = window.location.pathname.slice(6, window.location.pathname.length)
+
+   // socket.emit('userValidation', user, GameId)
+
+    
+</script>
 </html>

@@ -37,6 +37,13 @@
     var socket = io('http://localhost:3000')
     var root = document.getElementById('root')
 
+    socket.on('serverOn', function(id){
+        if(window.sessionStorage.getItem('id') === null){
+            window.sessionStorage.setItem('id', id)
+        }
+        
+    })
+
 
     window.sessionStorage.setItem('icon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU')
     var IconSelect = 1
