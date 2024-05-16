@@ -43,20 +43,43 @@ io.on('connection', socket => {
    
 
     socket.on('createLobby', function(data){
-        let first = Math.random()       
+
+        console.log('----------------------------------')
+        var first = Math.random()       
                 .toString(36)   
                 .substr(-4)     
                 .toUpperCase(); 
                 
-        let last = Math.floor((Math.random() * (9999 - 1000)) + 1000); 
+        var last = Math.floor((Math.random() * (9999 - 1000)) + 1000); 
 
-        var lobby = {'name': data.name,
-            'playersTotal': data.playersTotal,
-            'playetsAtivos': data.playetsAtivos,
-            'idioma': data.idioma,
-            'open': data.open,
-            'id': `${first}-${last}` }
+        var id =  `${first}-${last}`
+
+        console.log(`Gerando ID: ${id}`)
         
+        console.log(`Verificando ID: ${id}`)
+        var i = 0
+        var idValid = true
+        while(i < lobbys.length){   
+            if(id === lobbys[i].id){
+                console.log('Já existe esta ID registrado, gerando outro aleatoriamente:')
+                first = Math.random()       
+                .toString(36)   
+                .substr(-4)     
+                .toUpperCase(); 
+                
+                last = Math.floor((Math.random() * (9999 - 1000)) + 1000); 
+
+                id = `${first2}-${last2}`
+                console.log(id)
+
+            }else if(i === lobbys.length){
+                console.log('Nenhum ID igual a esta no momento')
+                i = lobbys[i].length + 5
+                idValid = true
+            }
+            i++
+        }
+        console.log(`ID gerado e verificado com sucesso`)
 
         lobbys.push(lobby)
 
