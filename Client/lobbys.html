@@ -51,9 +51,7 @@
             <input type="text" placeholder="Digite o codigo aqui!" style="padding: 10px 0 10px 0px; margin: 10px 0 10px 0; outline: none; border: none; border-radius: 5px; text-align: center; font-size: 20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
             <button style="padding: 10px; margin: 10px 0 10px 0; border-radius: 5px; border: none; cursor: pointer;">Entrar</button>
         <h2>Salas publicas:</h2>
-            <div  class="salas" id="rootSalas">
-
-            </div>
+            <div  class="salas" id="rootSalas"></div>
     </main>
 </body>
 <style>
@@ -122,6 +120,8 @@
         width: 100%;;
     }
     .class {
+        outline: none;
+        border: none;
         cursor: pointer;
         background-color: #e01f1f;
         padding: 10px 5px 10px 5px;
@@ -142,7 +142,6 @@
         color: #fff;
         height: 35px;
         width: 100px;
-        background-color: green;
 
         display: flex;
         align-items: center;
@@ -176,9 +175,15 @@
         var i = 0 
         while(i < salas.length){
             if(salas[i].open === 'true'){
-                var div = document.createElement("div");
+                console.log(salas[i].id)
+                var id = salas[i].id
+                var div = document.createElement("button");
                 div.className = `class`
-                div.innerHTML = `<span>${salas[i].idioma}</span><input style="width: 100%;" type="text" disabled placeholder="${salas[i].name}" /><input style="width: 45px;" type="text" disabled  placeholder="${salas[i].playetsAtivos}/${salas[i].playersTotal}"/>`;
+                div.onclick = function(){
+                    window.location = `/game/${id}`
+                }
+                div.id = id
+                div.innerHTML = `<span>${salas[i].idioma}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].playetsAtivos}/${salas[i].playersTotal}</span>`;
                 root.appendChild(div); 
             }
             i++
@@ -238,9 +243,14 @@
 
 
     socket.on('lobbyUpdata',  function(lobby){
-            var div = document.createElement("div");
+        var id = lobby.id
+        var div = document.createElement("button");
             div.className = `class`
-            div.innerHTML = `<span>${lobby.idioma}</span><input style="width: 100%;" type="text" disabled placeholder="${lobby.name}" /><input style="width: 45px;" type="text" disabled  placeholder="${lobby.playetsAtivos}/${lobby.playersTotal}"/>`;
+            div.onclick = function(){
+                window.location = `/game/${id}`
+            }
+            div.id = id
+            div.innerHTML = `<span>${lobby.idioma}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.playetsAtivos}/${lobby.playersTotal}</span>`;
             root.appendChild(div); 
     })
  
