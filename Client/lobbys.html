@@ -241,6 +241,15 @@
         socket.emit("createLobby", lobby)
     }
 
+    socket.on('createLobbyResult', function(data){
+        console.log(data)
+        if(data.stats === "sucess"){
+            window.location = `/game/${data.id}`
+        }else{
+            alert("Não foi possivel criar seu lobby :c")
+        }
+    })
+
 
     socket.on('lobbyUpdata',  function(lobby){
         var id = lobby.id
