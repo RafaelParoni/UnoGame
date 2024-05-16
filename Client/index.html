@@ -8,6 +8,7 @@
     <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+    <script src="./script.js"></script>
 </head>
 <body>
     <div class="menu">
@@ -34,10 +35,9 @@
     </div>
 </body>
 <script type="text/javascript">
-    var socket = io('http://localhost:3000')
     var root = document.getElementById('root')
 
-    socket.on('serverOn', function(id){
+    socket.on('serverOn', function(id){ // pegando socket id e salvando no sessionStorage
         if(window.sessionStorage.getItem('id') === null){
             window.sessionStorage.setItem('id', id)
         }
@@ -48,7 +48,7 @@
     window.sessionStorage.setItem('icon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU')
     var IconSelect = 1
 
-    function selectIcon(Num){
+    function selectIcon(Num){ // definindo o icone do usuario e salvando no sesstionStorage
         var iconClick = document.getElementById(Num)
         iconClick.style.border = '2px solid #F8DA27'
         document.getElementById(IconSelect).style.border = 'none'
@@ -56,7 +56,7 @@
         IconSelect = Num
     }
 
-    function SearchLobby(){
+    function SearchLobby(){ // definindo o nome do usuario, salvando no sesstionStorage e enviando para /lobbys/
         var name = document.getElementById('username')
         var alert = document.getElementById("alertUserName")
         if(name.value === '' || name.value.length === 0 || name.value.length < 4){
@@ -71,7 +71,7 @@
         }else{
             console.log(name.value)
             window.sessionStorage.setItem('name', name.value)
-            window.location = '/lobbys/'
+            window.location = '/menu/'
         }
     }
 

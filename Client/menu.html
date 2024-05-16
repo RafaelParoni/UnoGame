@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNO   SOCKET.IO</title>
+    <title>UNO SOCKET.IO</title>
     <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
@@ -165,10 +165,6 @@
 </style>
 <script type="text/javascript">
    
-    var socket = io('http://localhost:3000')
-
-    socket.emit('searchLobbys', 'procurando lobbys disponiveis')
-
     var root = document.getElementById("rootSalas")
 
     socket.on('lobbysResult', function(salas){
@@ -253,7 +249,6 @@
   
 
     function visible(id, id2){
-        console.log(id)
         var div = document.getElementById(id)
         var divText = document.getElementById(id2)
         if(div.style.display === 'none'){

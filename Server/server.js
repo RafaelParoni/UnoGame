@@ -17,15 +17,49 @@ app.set('view engine', 'html');
 app.use('/', (req, res) => {
     var path = req._parsedOriginalUrl.pathname 
 
-    if(path === '/lobbys/'){
-        res.render('lobbys.html')
+    if(path === '/menu/'){
+        res.render('menu.html')
+    }else if(path.includes('/lobby/')){
+        res.render('lobby.html')
     }else if(path.includes('/game/')){
-        res.render('jogo.html')
+        res.render('game.html')
     }else{
         res.render('index.html')
     }
 })
 
+/* SESSION STORAGE
+name  - user name
+icon - user icon
+id - sockect id
+stats - inGame - Lobby - Menu
+gameId - se InGame for verdadeiro
+
+--  LOBBY/GAME 
+name - lobby/game name
+MaxPlayers - maximo de players
+QuantidadePlayers - players no lobby/game
+players [
+    {
+        'name': 'user name'
+        'icon': 'user icon'
+        'id': 'user id',
+        'cards': [
+            {
+                name: 1
+                value: 1
+                color: red
+            },
+            {
+                name: +2
+                value: +2
+                color: yellow
+            }
+        ]
+    },
+]
+
+*/
 
 
 io.on('connection', socket => {
