@@ -20,10 +20,10 @@ app.use('/', (req, res) => {
         case '/':
             res.render('index.html')
             break;
-        case '/lobbys':
+        case '/lobbys/':
             res.render('lobbys.html')
             break;
-        case '/game':
+        case '/game/':
                 res.render('jogo.html')
                 break;
         default:
@@ -35,14 +35,41 @@ app.use('/', (req, res) => {
 
 let users = [];
 
-let lobbys = [];
+var lobbys = []
+
 
 io.on('connection', socket => {
     socket.emit('serverOn', socket.id)
    
 
+    socket.on('createLobby', function(data){
+        let first = Math.random()       
+                .toString(36)   
+                .substr(-4)     
+                .toUpperCase(); 
+                
+        let last = Math.floor((Math.random() * (9999 - 1000)) + 1000); 
+
+        var lobby = {'name': data.name,
+            'playersTotal': data.playersTotal,
+            'playetsAtivos': data.playetsAtivos,
+            'idioma': data.idioma,
+            'open': data.open,
+            'id': `${first}-${last}` }
+        
+
+        lobbys.push(lobby)
+
+        if(data.open === 'true'){
+            socket.broadcast.emit('lobbyUpdata', lobby)
+        }
+
+
+        console.log('New lobby')
+    })
     socket.on('searchLobbys', function(data){
         console.log(data)
+        socket.emit('lobbysResult', lobbys)
     })
     socket.on('clientOff', function(data){
         console.log(data)

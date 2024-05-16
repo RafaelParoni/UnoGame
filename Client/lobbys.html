@@ -4,21 +4,235 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNO   SOCKET.IO</title>
-    <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+    
 </head>
+
 <body>
-    <h1>Lobby</h1>
+    <main>
+        <div class="options">
+            <span style="font-size: 20px;">Idioma:</span>
+            <select value="BR-PT" id="lang">
+                <option>BR-PT</option>
+                <option>US-EN</option>
+                <option>EN-ES</option>
+            </select>
+            <span style="margin: 10px 5px 10px 5px; cursor: pointer;  font-size: 15px; width: 20px; height: 20px; text-align: center; border-radius: 50%; background-color: #fff;">i</span>
+        </div>
+        <div class="options">
+            <button onclick="visible('newLobbby', 'newLobbyBtn')"  class="btn"> <span id="newLobbyBtn">Esconder</span> criador de salas</button>
+        </div>
+        <div id="newLobbby" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+            <h2>Criar sala!</h2>
+            <input id="clName" type="text" placeholder="Nome da sala!" style="padding: 10px 0 10px 0px; margin: 10px 0 10px 0; outline: none; border: none; border-radius: 5px; text-align: center; font-size: 20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <span style="text-decoration: double; font-size: 20px; margin: 5px 0 5px 0;"><b>máximo de players na sala: </b></span>
+            <input id="clPlayers" type="number" value="2"  min="2" max="15" style="outline: none; border: none; padding: 10px 5px 10px 5px; border-radius: 5px; width: 100px; text-align: center;">
+            <span> <b>Min:</b> 02 - <b>Max</b> 15</span>
+            <span style="text-decoration: double; font-size: 20px; margin: 5px 0 5px 0;"><b>Tipo de sala: </b></span>
+            <select id="clType" style="padding: 10px 5px 10px 5px; border-radius: 5px; cursor: pointer; outline: none; border: none;">
+                <option value="true">ABERTA</option>
+                <option value="false" >FECHADA</option>
+            </select>
+            <span style="margin: 5px 0 5px 0;"> <b>ABERTA</b>: qualquer um pode entrar. <br> <b>FECHADA</b>: Só é possivel entrar com o codigo!</span>
+            <button onclick="createLobby()" style="padding: 10px; margin: 10px 0 10px 0; border-radius: 5px; border: none; cursor: pointer;">Criar</button>
+        </div>
+        <h2 style="margin-top: 20px;">Salas privadas!</h2>
+            <input type="text" placeholder="Digite o codigo aqui!" style="padding: 10px 0 10px 0px; margin: 10px 0 10px 0; outline: none; border: none; border-radius: 5px; text-align: center; font-size: 20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <button style="padding: 10px; margin: 10px 0 10px 0; border-radius: 5px; border: none; cursor: pointer;">Entrar</button>
+        <h2>Salas publicas:</h2>
+            <div  class="salas" id="rootSalas">
+
+            </div>
+    </main>
 </body>
+<style>
+    body {
+    display: flex;
+    align-items: start  ;
+    justify-content: center;
+    width: 100%;
+    background-color: rgb(156, 5, 5);
+    padding: 100px 0 100px 0;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .btn {
+        padding: 10px 5px 10px 5px;
+        outline: none;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #fff;
+        transition: 0.5s;
+    }
+    .btn:hover {
+        background-color: #d3d3d3;
+    }
+
+    h2 {
+        margin: 0;
+        padding: 0;
+    }
+
+    main {
+        width: 600px;
+        height: auto;
+        padding: 15px 0 15px 0;
+        background-color: rgba(247, 248, 247, 0.507);
+        border: 1px solid #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        border-radius: 15px;
+    }
+    .options {
+        width: 95%;
+        display: flex;
+        align-items: center;
+        justify-content: right;
+        margin-bottom:20px;
+    }
+    .options select {
+        border-radius: 5px;
+        padding: 10px 5px 10px 5px;
+        outline: none;
+        cursor: pointer;
+    }
+    .options option {
+        padding: 10px;
+        
+    }
+    .salas {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;;
+    }
+    .class {
+        cursor: pointer;
+        background-color: #e01f1f;
+        padding: 10px 5px 10px 5px;
+        border-radius: 5px;
+        grid-gap: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 80%;
+        margin: 10px 0 10px 0;
+        text-transform: capitalize;
+        transition: 0.2s;
+    }
+    .class:hover {
+        background-color: #b41111;
+    }
+    .class span{
+        color: #fff;
+        height: 35px;
+        width: 100px;
+        background-color: green;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .class input {
+        cursor: pointer;
+        background-color: transparent;
+        outline: none;
+        border: none;
+        color: #fff;
+        height: auto;
+        width: auto;
+        font-size: 15px;
+    }
+    .class input::placeholder{
+        color: #fff;
+        text-transform:lowercase;
+    }
+
+</style>
 <script type="text/javascript">
     var socket = io('http://localhost:3000')
 
     socket.emit('searchLobbys', 'procurando lobbys disponiveis')
 
+    var root = document.getElementById("rootSalas")
+
+    socket.on('lobbysResult', function(salas){
+        var i = 0 
+        while(i < salas.length){
+            if(salas[i].open === 'true'){
+                var div = document.createElement("div");
+                div.className = `class`
+                div.innerHTML = `<span>${salas[i].idioma}</span><input style="width: 100%;" type="text" disabled placeholder="${salas[i].name}" /><input style="width: 45px;" type="text" disabled  placeholder="${salas[i].playetsAtivos}/${salas[i].playersTotal}"/>`;
+                root.appendChild(div); 
+            }
+            i++
+        }   
+    })
+    
+
     socket.on("disconnect", (reason) => {
         socket.emit('clientOff', 'um usuario saiu da conexao')
     });
+
+
+    function visible(id, id2){
+        console.log(id)
+        var div = document.getElementById(id)
+        var divText = document.getElementById(id2)
+        if(div.style.display === 'none'){
+            div.style.display = 'flex'
+            divText.innerHTML = 'Esconder'
+        }else{
+            div.style.display = 'none'
+            divText.innerHTML = 'Mostar'
+        }
+    }
+
+    function createLobby(){
+        var lobbyName = document.getElementById("clName").value
+        var maxPlayers = document.getElementById("clPlayers").value
+        var lobbyType = document.getElementById('clType').value
+        var lang = document.getElementById("lang").value
+        var lobbyTypeText = ''
+        if(maxPlayers > 15){
+            alert('Numero max de players alem do suportado!')
+            return
+        }
+        if(maxPlayers < 2){
+            alert('Numero minimo de players menor do suportado')
+            return
+        }
+
+        if(lobbyType === true){
+            lobbyTypeText = 'Aberto'
+        }else{
+            lobbyTypeText = 'Fechado'
+        }
+        alert(`Criando lobby ${lobbyName} com o máximo de players ${maxPlayers}, ${lobbyTypeText} com o idioma preferido de ${lang}`)
+        var lobby = {'name': lobbyName,
+            'playersTotal': maxPlayers,
+            'playetsAtivos': '01',
+            'idioma': lang,
+            'open': lobbyType,
+            'id': ''}
+        
+
+        socket.emit("createLobby", lobby)
+    }
+
+
+    socket.on('lobbyUpdata',  function(lobby){
+            var div = document.createElement("div");
+            div.className = `class`
+            div.innerHTML = `<span>${lobby.idioma}</span><input style="width: 100%;" type="text" disabled placeholder="${lobby.name}" /><input style="width: 45px;" type="text" disabled  placeholder="${lobby.playetsAtivos}/${lobby.playersTotal}"/>`;
+            root.appendChild(div); 
+    })
+ 
 </script>
 </html>
