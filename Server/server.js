@@ -36,7 +36,7 @@ io.on('connection', socket => {
     socket.emit('serverOn', socket.id)
    
 
-    socket.on('createLobby', function(data){
+    socket.on('createLobby', function(data, user){
 
         console.log('----------------------------------')
         var first = Math.random()       
@@ -86,6 +86,14 @@ io.on('connection', socket => {
     
             lobbys.push(lobby)
             console.log('Lobby criando com sucesso com ID: ' + id)
+
+            users.push({
+                'name': user.name,
+                'icon': user.icon,
+                'stats': 'inGame',
+                'game': id
+               })
+            console.log(users)
             socket.emit("createLobbyResult", {'msg': 'Lobby criando com sucesso', 'stats': 'sucess', 'id': id})
         }else{
             console.log('Não foi possivel criar o lobby')
@@ -102,7 +110,7 @@ io.on('connection', socket => {
         console.log(data)
         socket.emit('lobbysResult', lobbys)
     })
-    socket.on('enterGame', function(id){
+    socket.on('enterGame', function(id, user){
         var result = {
             'msg': '',
             'stats': '',
@@ -121,12 +129,20 @@ io.on('connection', socket => {
                         'id': id,
                     }
                     socket.emit('enterGameResult', result)
+
+                   users.push({
+                    'name': user.name,
+                    'icon': user.icon,
+                    'stats': 'inGame',
+                    'game': id
+                   })
+                   console.log(users)
                 }else{
                     console.log('Lobby cheio')
                     result = {
                         'msg': 'Lobby cheio!',
                         'stats': 'error',
-                        'id': '???',
+                        'id': '',
                     }
                     socket.emit('enterGameResult', result)
                 }

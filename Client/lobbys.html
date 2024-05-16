@@ -172,6 +172,10 @@
     var root = document.getElementById("rootSalas")
 
     socket.on('lobbysResult', function(salas){
+        var user = {
+            'name': window.sessionStorage.getItem('name'),
+            'icon': window.sessionStorage.getItem("icon"),
+        }
         var i = 0 
         while(i < salas.length){
             if(salas[i].open === 'true'){
@@ -180,7 +184,7 @@
                 var div = document.createElement("button");
                 div.className = `class`
                 div.onclick = function(){
-                    socket.emit('enterGame', id)
+                    socket.emit('enterGame', id, user)
                 }
                 div.id = id
                 div.innerHTML = `<span>${salas[i].idioma}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].playetsAtivos}/${salas[i].playersTotal}</span>`;
@@ -190,25 +194,22 @@
         }   
     })
     
-
-    socket.on("disconnect", (reason) => {
-        socket.emit('clientOff', 'um usuario saiu da conexao')
-    });
-
-
-    function visible(id, id2){
-        console.log(id)
-        var div = document.getElementById(id)
-        var divText = document.getElementById(id2)
-        if(div.style.display === 'none'){
-            div.style.display = 'flex'
-            divText.innerHTML = 'Esconder'
-        }else{
-            div.style.display = 'none'
-            divText.innerHTML = 'Mostar'
+    socket.on('lobbyUpdata',  function(lobby){
+        var user = {
+            'name': window.sessionStorage.getItem('name'),
+            'icon': window.sessionStorage.getItem("icon"),
         }
-    }
-
+        var id = lobby.id
+        var div = document.createElement("button");
+            div.className = `class`
+            div.onclick = function(){
+                socket.emit('enterGame', id, user)
+            }
+            div.id = id
+            div.innerHTML = `<span>${lobby.idioma}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.playetsAtivos}/${lobby.playersTotal}</span>`;
+            root.appendChild(div); 
+    })
+    
     function createLobby(){
         var lobbyName = document.getElementById("clName").value
         var maxPlayers = document.getElementById("clPlayers").value
@@ -236,11 +237,16 @@
             'idioma': lang,
             'open': lobbyType,
             'id': ''}
+
+        var user = {
+            'name': window.sessionStorage.getItem('name'),
+            'icon': window.sessionStorage.getItem("icon"),
+        }
         
 
-        socket.emit("createLobby", lobby)
+        socket.emit("createLobby", lobby, user)
     }
-
+    
     socket.on('createLobbyResult', function(data){
         console.log(data)
         if(data.stats === "sucess"){
@@ -249,22 +255,33 @@
             alert("Não foi possivel criar seu lobby :c")
         }
     })
+    
+    socket.on("disconnect", (reason) => {
+        socket.emit('clientOff', 'um usuario saiu da conexao')
+    });
+
+    function visible(id, id2){
+        console.log(id)
+        var div = document.getElementById(id)
+        var divText = document.getElementById(id2)
+        if(div.style.display === 'none'){
+            div.style.display = 'flex'
+            divText.innerHTML = 'Esconder'
+        }else{
+            div.style.display = 'none'
+            divText.innerHTML = 'Mostar'
+        }
+    }
 
     socket.on('enterGameResult', function(data){
-        console.log(data)
+        if(data.stats === 'sucess'){
+            window.location = `/game/${data.id}`
+        }else{
+            alert(data.msg)
+        }
     })
 
-    socket.on('lobbyUpdata',  function(lobby){
-        var id = lobby.id
-        var div = document.createElement("button");
-            div.className = `class`
-            div.onclick = function(){
-                socket.emit('enterGame', id)
-            }
-            div.id = id
-            div.innerHTML = `<span>${lobby.idioma}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.playetsAtivos}/${lobby.playersTotal}</span>`;
-            root.appendChild(div); 
-    })
+  
  
 </script>
 </html>
