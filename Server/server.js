@@ -16,19 +16,13 @@ app.set('view engine', 'html');
 
 app.use('/', (req, res) => {
     var path = req._parsedOriginalUrl.pathname 
-    switch(path){
-        case '/':
-            res.render('index.html')
-            break;
-        case '/lobbys/':
-            res.render('lobbys.html')
-            break;
-        case '/game/':
-                res.render('jogo.html')
-                break;
-        default:
-            res.render('index.html')
-            break;
+
+    if(path === '/lobbys/'){
+        res.render('lobbys.html')
+    }else if(path.includes('/game/')){
+        res.render('jogo.html')
+    }else{
+        res.render('index.html')
     }
 })
 
