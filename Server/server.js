@@ -81,7 +81,23 @@ io.on('connection', socket => {
         }
         console.log(`ID gerado e verificado com sucesso`)
 
-        lobbys.push(lobby)
+        if(idValid === true){
+            var lobby = {'name': data.name,
+                'playersTotal': data.playersTotal,
+                'playetsAtivos': data.playetsAtivos,
+                'idioma': data.idioma,
+                'open': data.open,
+                'id': id }
+            
+    
+            lobbys.push(lobby)
+            console.log('Lobby criando com sucesso com ID: ' + id)
+            socket.emit("createLobbyResult", {'msg': 'Lobby criando com sucesso', 'stats': 'sucess', 'id': id})
+        }else{
+            console.log('Não foi possivel criar o lobby')
+            socket.emit("createLobbyResult", {'msg': 'Não foi possivel criar o lobby', 'stats': 'error', 'id': '???'})
+        }
+
 
         if(data.open === 'true'){
             socket.broadcast.emit('lobbyUpdata', lobby)
