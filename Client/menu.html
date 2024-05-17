@@ -170,14 +170,18 @@
 
     socket.emit('lobbysRequest', 'lobbys') // faz o request para o servidor enviar os lobbys publicos 
     socket.on('lobbysResult', function(salas){ // recebe o resultado do requestes com a lista dos lobbys e mostrar na tela do usuario
-        console.log(salas)
+        var user = {
+            'name': window.sessionStorage.getItem('name'),
+            'id': window.sessionStorage.getItem('id'),
+            'icon': window.sessionStorage.getItem('icon'),
+        }
         var i = 0 
         while(i < salas.length){
             var id = salas[i].id
             var div = document.createElement("button");
             div.className = `class`
             div.onclick = function(){
-                socket.emit('enterGame', id)
+                socket.emit('enterLobby', id, user)
             }
             div.id = id
             div.innerHTML = `<span>${salas[i].lang}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].players.length}/${salas[i].maxPlayers}</span>`;
@@ -188,12 +192,16 @@
     })
     
     socket.on('newLobby',  function(lobby){ // recebe um alert de que a um novo lobby na lista e adiciona ele a tela do usuario
-        console.log(lobby)
+        var user = {
+            'name': window.sessionStorage.getItem('name'),
+            'id': window.sessionStorage.getItem('id'),
+            'icon': window.sessionStorage.getItem('icon'),
+        }
         var id = lobby.id
         var div = document.createElement("button");
             div.className = `class`
             div.onclick = function(){
-                console.log('Entrando no lobby')
+                socket.emit('enterLobby', lobby.id, user)
             }
             div.id = id
             div.innerHTML = `<span>${lobby.lang}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.players.length}/${lobby.maxPlayers}</span>`;
@@ -243,6 +251,15 @@
         window.location = `/lobby/${result.lobbyId}`
     })
   
+    socket.on('enterLobbyResult', function(result, lobby){
+        alert(result.msg)
+
+        if(result.stats === 'sucess'){
+            window.sessionStorage.setItem('gameId', result.id)
+            window.sessionStorage.setItem('stats', 'inGame')
+        }
+        window.location = result.url
+    })
 
     function visible(id, id2){
         var div = document.getElementById(id)

@@ -148,6 +148,54 @@ io.on('connection', socket => {
 
         socket.emit('lobbysResult', lobbysPublics)
     })
+
+    socket.on('enterLobby', function(id, user){
+        console.log('------------------------------')
+        console.log(`Procurando lobby com ID: ${id}`)
+        console.log(user)
+        var lobby = []
+        var i = 0
+        while( i < lobbys.length){
+            if(lobbys[i].id === id){
+                console.log("Lobby encontrado!")
+                if(lobbys[i].maxPlayers === lobbys[i].players.length){
+                    let result = {
+                        'msg': 'Lobby cheio :(',
+                        'stats': 'error',
+                    }
+                    socket.emit('enterLobbyResult', result)
+                }else{
+                    lobbys[i].players.push(
+                        {
+                        'name': user.name,
+                        'icon': user.icon,
+                        'id': user.id,
+                        'stats': 'member',
+                        'cards': [],
+                    })
+                    let result = {
+                        'msg': 'Entrando no lobby!',
+                        'stats': 'sucess',
+                        'url': `/lobby/${id}`,
+                        'id': id
+                    }
+                    
+                    socket.emit('enterLobbyResult', result, lobbys[i])
+                }
+                lobby = [lobbys[i]]
+                i = lobbys.length
+            }
+            i++
+        }
+
+        if(lobby.length === 0){
+            let result = {
+                'msg': 'Lobby não encontrado',
+                'stats': 'error',
+            }
+            socket.emit('enterLobbyResult', result)
+        }
+    })
    
 })
 
