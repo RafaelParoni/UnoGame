@@ -38,10 +38,7 @@
     var root = document.getElementById('root')
 
     socket.on('serverOn', function(id){ // pegando socket id e salvando no sessionStorage
-        if(window.sessionStorage.getItem('id') === null){
             window.sessionStorage.setItem('id', id)
-        }
-        
     })
 
 
