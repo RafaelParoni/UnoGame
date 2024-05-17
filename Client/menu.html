@@ -7,7 +7,7 @@
     <link rel="shortcut icon" href="./UnoFavIcon.png" type="image/x-icon">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
-    
+
 </head>
 
 <body>
@@ -164,51 +164,43 @@
 
 </style>
 <script type="text/javascript">
-   
+    var socket = io('http://localhost:3000')
     var root = document.getElementById("rootSalas")
 
-    socket.on('lobbysResult', function(salas){
-        var user = {
-            'name': window.sessionStorage.getItem('name'),
-            'icon': window.sessionStorage.getItem("icon"),
-            'id': window.sessionStorage.getItem('id')
-        }
+
+    socket.emit('lobbysRequest', 'lobbys') // faz o request para o servidor enviar os lobbys publicos 
+    socket.on('lobbysResult', function(salas){ // recebe o resultado do requestes com a lista dos lobbys e mostrar na tela do usuario
+        console.log(salas)
         var i = 0 
         while(i < salas.length){
-            if(salas[i].open === 'true'){
-                console.log(salas[i].id)
-                var id = salas[i].id
-                var div = document.createElement("button");
-                div.className = `class`
-                div.onclick = function(){
-                    socket.emit('enterGame', id, user)
-                }
-                div.id = id
-                div.innerHTML = `<span>${salas[i].idioma}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].playetsAtivos}/${salas[i].playersTotal}</span>`;
-                root.appendChild(div); 
+            var id = salas[i].id
+            var div = document.createElement("button");
+            div.className = `class`
+            div.onclick = function(){
+                socket.emit('enterGame', id)
             }
+            div.id = id
+            div.innerHTML = `<span>${salas[i].lang}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].players.length}/${salas[i].maxPlayers}</span>`;
+            root.appendChild(div); 
+            
             i++
         }   
     })
     
-    socket.on('lobbyUpdata',  function(lobby){
-        var user = {
-            'name': window.sessionStorage.getItem('name'),
-            'icon': window.sessionStorage.getItem("icon"),
-            'id': window.sessionStorage.getItem('id')
-        }
+    socket.on('newLobby',  function(lobby){ // recebe um alert de que a um novo lobby na lista e adiciona ele a tela do usuario
+        console.log(lobby)
         var id = lobby.id
         var div = document.createElement("button");
             div.className = `class`
             div.onclick = function(){
-                socket.emit('enterGame', id, user)
+                console.log('Entrando no lobby')
             }
             div.id = id
-            div.innerHTML = `<span>${lobby.idioma}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.playetsAtivos}/${lobby.playersTotal}</span>`;
+            div.innerHTML = `<span>${lobby.lang}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.players.length}/${lobby.maxPlayers}</span>`;
             root.appendChild(div); 
     })
     
-    function createLobby(){
+    function createLobby(){ // verificando credencias e fazendo o request com o servidor para criar o lobby
         var lobbyName = document.getElementById("clName").value
         var maxPlayers = document.getElementById("clPlayers").value
         var lobbyType = document.getElementById('clType').value
@@ -228,24 +220,28 @@
         }else{
             lobbyTypeText = 'Fechado'
         }
-        alert(`Criando lobby ${lobbyName} com o máximo de players ${maxPlayers}, ${lobbyTypeText} com o idioma preferido de ${lang}`)
-        var lobby = {'name': lobbyName,
-            'playersTotal': maxPlayers,
-            'playetsAtivos': 1,
-            'idioma': lang,
-            'open': lobbyType,
-            'id': ''}
+        alert(`Criando lobby "${lobbyName}" com o máximo de ${maxPlayers} players, ${lobbyTypeText} com o idioma preferido de ${lang}`)
+   
+        var lobby = {
+            'name': lobbyName,
+            'maxPlayers': parseInt(maxPlayers),
+            'lang': lang,
+            'publicLobby': lobbyType,
+        }
 
         var user = {
-            'name': window.sessionStorage.getItem('name'),
+            'name': window.sessionStorage.getItem("name"),
             'icon': window.sessionStorage.getItem("icon"),
-            'id': window.sessionStorage.getItem('id')
+            'id': window.sessionStorage.getItem("id")
         }
         
-
         socket.emit("createLobby", lobby, user)
     }
     
+    socket.on('createLobbyResult', function(result){ // recebendo o resultado do request para criar um novo lobby
+        alert(result.msg)
+        window.location = `/lobby/${result.lobbyId}`
+    })
   
 
     function visible(id, id2){
