@@ -30,7 +30,7 @@
         <div class='menuInfo'> 
                     <b><p id='alertUserName'>Coloque um nome de usuario </p></b>
                     <input type='text' id='username' placeholder='Username' />
-                    <button onclick="SearchLobby()"> Iniciar </button> 
+                    <button onclick="ConnectToServer()"> Iniciar </button> 
         </div>
     </div>
 </body>
@@ -56,7 +56,7 @@
         IconSelect = Num
     }
 
-    function SearchLobby(){ // definindo o nome do usuario, salvando no sesstionStorage e enviando para /lobbys/
+    function ConnectToServer(){ // definindo o nome do usuario, salvando no sesstionStorage e enviando para /lobbys/
         var name = document.getElementById('username')
         var alert = document.getElementById("alertUserName")
         if(name.value === '' || name.value.length === 0 || name.value.length < 4){
@@ -71,16 +71,11 @@
         }else{
             console.log(name.value)
             window.sessionStorage.setItem('name', name.value)
+            window.sessionStorage.setItem('stats', 'menu')
+            window.sessionStorage.setItem('gameId', '???')
             window.location = '/menu/'
         }
     }
 
-
-    socket.on("disconnect", (reason) => {
-        socket.emit('clientOff', 'um usuario saiu da conexao')
-        if (reason === "io server disconnect") { 
-            socket.connect();
-        }
-    });
 </script>
 </html>
