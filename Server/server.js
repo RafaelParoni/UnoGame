@@ -197,6 +197,51 @@ io.on('connection', socket => {
         }
     })
    
+
+    socket.on('userValidation', function(gameId, user){ // recebe a solicitação de verificação do usuario que acabou de entrar no lobby
+        var result = {}
+        var i = 0
+        while(i < lobbys.length){
+            if(gameId === lobbys[i].id){
+                var x = 0
+                while(x < lobbys[i].players.length){
+                    if(lobbys[i].players[x].id === user.id){// envia um [result] para o front end informando os stats do usuario
+                        result = {
+                            'msg': 'Usuario encontrado na lista do lobby',
+                            'stats': 'sucess',
+                            'type': 'none',
+                        }
+                        socket.emit("userValidationResult", result)
+                        x = lobbys[i].players.length + 1
+                    }
+                    x++
+                }
+
+                if(x === lobbys[i].players.length){ // envia um [result] para o front end informando os stats do usuario
+                    result = {
+                        'msg': 'Não foi possivel verificar seu ID com o IDs do lobby',
+                        'stats': 'error',
+                        'type': 'playerNotFound',
+                    }
+                    socket.emit("userValidationResult", result)
+                    console.log("User não foi encontrado na lista de palyers!")
+                }
+                i = i + lobbys.length + 1
+            }
+            i++
+        }
+
+        if( i === lobbys.length){ // envia um [result] para o front end informando os stats do usuario
+            result = {
+                'msg': 'Não foi possivel encontrar o lobby!',
+                'stats': 'error',
+                'type': 'lobbyNotFound',
+            }
+            socket.emit("userValidationResult", result)
+            console.log("Lobby não encontrado!")
+        }
+    })
+
 })
 
 
