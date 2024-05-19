@@ -194,7 +194,6 @@ io.on('connection', socket => {
             socket.emit('enterLobbyResult', result)
         }
     })
-   
 
     socket.on('userValidation', function(gameId, user){ // recebe a solicitação de verificação do usuario que acabou de entrar no lobby
         var result = {}
@@ -240,6 +239,27 @@ io.on('connection', socket => {
         }
     })
 
+
+    // recebe um alerta que o usuario saiu da janela, envia um evento para verificar se o usuario fechou a janela ou se abriu outra aba no lugar
+    // se fechou a janela ira retornar false e o usuario sera desconectado do jogo
+    socket.on('CloseAlert', function(data){ 
+        var response = false
+        console.log("Verificando conexão")
+        socket.emit('CloseAlertValidation', 'oi ta ai?') // envia o evento de verificação
+        socket.on('CloseAlertValidation', function(data){ // recebe um evento de confirmação
+            response = true
+        })
+
+        setTimeout(function(){ // verifica se o usuario respondeu ou não
+            if(response === false){
+                console.log('Usuario fechou a janela ou perdeu conexão com a internet!')
+            }else{
+                console.log("Usuario ainda esta com  a janle  aberta!")
+            }
+        },2000)
+    })
+
+    
 })
 
 
