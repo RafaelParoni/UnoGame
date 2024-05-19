@@ -1,7 +1,5 @@
-const exp = require('constants')
 const express = require('express');
-const { getDefaultAutoSelectFamily } = require('net');
-const path = require('path')
+const path = require('path');
 
 
 const app  = express()
