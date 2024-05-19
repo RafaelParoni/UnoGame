@@ -48,8 +48,8 @@
             <button onclick="createLobby()" style="padding: 10px; margin: 10px 0 10px 0; border-radius: 5px; border: none; cursor: pointer;">Criar</button>
         </div>
         <h2 style="margin-top: 20px;">Salas privadas!</h2>
-            <input type="text" placeholder="Digite o codigo aqui!" style="padding: 10px 0 10px 0px; margin: 10px 0 10px 0; outline: none; border: none; border-radius: 5px; text-align: center; font-size: 20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
-            <button style="padding: 10px; margin: 10px 0 10px 0; border-radius: 5px; border: none; cursor: pointer;">Entrar</button>
+            <input type="text" id="privateLobbys" placeholder="Digite o codigo aqui!" style="padding: 10px 0 10px 0px; margin: 10px 0 10px 0; outline: none; border: none; border-radius: 5px; text-align: center; font-size: 20px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+            <button style="padding: 10px; margin: 10px 0 10px 0; border-radius: 5px; border: none; cursor: pointer;" onclick="enterPrivateLobby()">Entrar</button>
         <h2>Salas publicas:</h2>
             <div  class="salas" id="rootSalas"></div>
     </main>
@@ -257,9 +257,26 @@
         if(result.stats === 'sucess'){
             window.sessionStorage.setItem('gameId', result.id)
             window.sessionStorage.setItem('stats', 'inGame')
+            window.location = result.url
         }
-        window.location = result.url
     })
+
+    function enterPrivateLobby(){
+        var id = document.getElementById('privateLobbys').value
+        var user = {
+                'name': window.sessionStorage.getItem('name'),
+                'id': window.sessionStorage.getItem('id'),
+                'icon': window.sessionStorage.getItem('icon'),
+            }
+        if(id === '' || id === ' ' ||  id.length < 9){
+            alert('Codigo não compativel: XXXX-0000')
+            return
+        }else{
+            alert('Buscando lobby: ' + id)
+            socket.emit('enterLobby', id, user)
+        }
+    }
+
 
     function visible(id, id2){
         var div = document.getElementById(id)
