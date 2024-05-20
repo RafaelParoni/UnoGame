@@ -66,8 +66,10 @@
 
 
     function discontentGame(){
-        socket.emit("discontentGame", user, gameId)
-        window.location = '/menu/'
+        if (confirm('Sair do lobby?') == true) {
+            socket.emit("discontentGame", user, gameId)
+            window.location = '/menu/'
+        } 
     }
 
 </script>
