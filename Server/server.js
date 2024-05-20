@@ -242,7 +242,7 @@ io.on('connection', socket => {
 
     // recebe um alerta que o usuario saiu da janela, envia um evento para verificar se o usuario fechou a janela ou se abriu outra aba no lugar
     // se fechou a janela ira retornar false e o usuario sera desconectado do jogo
-    socket.on('CloseAlert', function(data){ 
+    socket.on('CloseAlert', function(userInfo, GameId){ 
         var response = false
         console.log("Verificando conexão")
         socket.emit('CloseAlertValidation', 'oi ta ai?') // envia o evento de verificação
@@ -252,10 +252,8 @@ io.on('connection', socket => {
 
         setTimeout(function(){ // verifica se o usuario respondeu ou não
             if(response === false){
-                console.log('Usuario fechou a janela ou perdeu conexão com a internet!')
-            }else{
-                console.log("Usuario ainda esta com  a janle  aberta!")
-            }
+                discontentGame(userInfo, GameId)
+            }   
         },2000)
     })
 
