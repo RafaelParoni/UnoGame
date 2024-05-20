@@ -256,6 +256,10 @@ io.on('connection', socket => {
             }   
         },2000)
     })
+    socket.on('discontentGame', function(userInfo, GameId){
+        discontentGame(userInfo, GameId)
+    })
+
 
     
 })
