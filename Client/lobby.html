@@ -63,5 +63,14 @@
         },1000)
     })
 
+
+
+    function discontentGame(){
+        socket.emit("discontentGame", user, gameId)
+        window.location = '/menu/'
+    }
+
 </script>
 </html>
+
+<button onclick="discontentGame()">Sair do lobby</button>
