@@ -19,7 +19,7 @@
         'icon': window.sessionStorage.getItem('icon'),
         'id': window.sessionStorage.getItem('id'),
     }
-    var GameId = window.location.pathname.slice(7, window.location.pathname.length)
+    var gameId = window.location.pathname.slice(7, window.location.pathname.length)
     
     socket.emit('userValidation', GameId, user)
 
@@ -55,7 +55,7 @@
     document.addEventListener(visibilityChange, closePage, false);
 
     function closePage() {
-        socket.emit('CloseAlert', 'close')
+        socket.emit('CloseAlert', user, gameId)
     }
     socket.on("CloseAlertValidation", function(data){
         setTimeout(function(){
