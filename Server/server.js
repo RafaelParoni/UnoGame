@@ -260,6 +260,69 @@ io.on('connection', socket => {
         discontentGame(userInfo, GameId)
     })
 
+    function discontentGame(userInfo, GameId){
+        var user = userInfo
+        var id = GameId
+        var i = 0
+        while(i < lobbys.length){
+            if(id === lobbys[i].id){
+                console.log('lOBBY: ' + lobbys[i].id)
+
+                if(lobbys[i].players.length === 1){
+                    console.log("Ultimo user do lobby, FECHANDO LOBBY")
+                    var y = i -1 
+                    if(i === 0){
+                        console.log('Removendo o primerio lobby da lista!')
+                        lobbys.shift()
+                    }else if(i === lobbys.length -1){
+                        console.log('Removendo o ultimo lobby da lista!')
+                        lobbys.pop()
+                    }else{
+                        lobbys.splice(y ,1)
+                        console.log('Removendo o lobby escolhido!')
+                    }
+                    console.log(lobbys)
+                    i = lobbys.length + 1
+                    return
+                }
+
+                var x = 0
+                while(x < lobbys[i].players.length){
+                    if(lobbys[i].players[x].id === user.id){
+                        console.log('Player: ' + user.id)
+                        if(lobbys[i].players[x].stats === 'boss'){
+                            console.log("USER BOSS!")
+                            if(x === 0){
+                                lobbys[i].players[1].stats = 'boss'
+                            }else{
+                                lobbys[i].players[0].stats = 'boss'
+                            }
+
+                        }
+                        var y = 0
+                        if(x === 0){
+                            console.log('Removendo o primerio da lista!')
+                            lobbys[i].players.shift()
+                        }else if(x === lobbys[i].players.length -1){
+                            console.log('Removendo o ultimo da lista!')
+                            lobbys[i].players.pop()
+                        }else{
+                            y = x -1 // y = x(3) -1 = 2
+                            lobbys[i].players.splice(y ,1)
+                            console.log('Removendo o user escolhido!')
+                        }
+                        console.log(lobbys[i].players)
+                    }
+                    x++
+                }
+                
+            }
+            i++
+        }
+        console.log('Usuario fechou a janela ou perdeu conexão com a internet!')
+    }
+
+
 
     
 })
