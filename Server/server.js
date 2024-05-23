@@ -316,6 +316,48 @@ io.on('connection', socket => {
     }
 
 
+    socket.on('GameValidation', (gameId, userId, callback) =>{
+        console.log(gameId)
+        var i = 0
+        var lobbyResult = false
+        var userInLobby = false
+        var LobbyStats = 'lobby'
+        while(i < lobbys.length){
+            if(lobbys[i].id === gameId){
+                var x = 0
+                while(x < lobbys[i].players.length){
+                    if(lobbys[i].players[x].id === userId){
+                        userInLobby = true
+                        x = lobbys[i].players[x].length + 2
+                    }
+                    x++
+                }
+                console.log(lobbys[i])
+                lobbyResult = true
+            }
+            i++
+        }
+
+        if(lobbyResult === true){
+            if(userInLobby === true){
+                callback({
+                    msg: 'Parece que este lobby existe!',
+                    stats: "inGame",
+                })
+            }else{
+                callback({
+                    msg: 'Parece que este lobby existe! Mas o players nãp é deste lobby',
+                    stats: "inGameNotPlayer",
+                })
+            }
+        }else{
+            callback({
+                msg: 'não tem lobby com este ID atualmente!',
+                stats: "NotFound",
+            })
+        }
+    })
+
 
 
     
