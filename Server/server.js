@@ -109,6 +109,7 @@ io.on('connection', socket => {
             'lang': data.lang,
             'id': id,
             'publicLobby': data.publicLobby,
+            'stats': 'lobby',
             'players': [
                 {
                     'name': user.name,
@@ -163,22 +164,31 @@ io.on('connection', socket => {
                     }
                     socket.emit('enterLobbyResult', result)
                 }else{
-                    lobbys[i].players.push(
-                        {
-                        'name': user.name,
-                        'icon': user.icon,
-                        'id': user.id,
-                        'stats': 'member',
-                        'cards': [],
-                    })
-                    let result = {
-                        'msg': 'Entrando no lobby!',
-                        'stats': 'sucess',
-                        'url': `/lobby/${id}`,
-                        'id': id
+                    if(lobbys[i].stats === 'lobby'){
+                        lobbys[i].players.push(
+                            {
+                            'name': user.name,
+                            'icon': user.icon,
+                            'id': user.id,
+                            'stats': 'member',
+                            'cards': [],
+                        })
+                        let result = {
+                            'msg': 'Entrando no lobby!',
+                            'stats': 'sucess',
+                            'url': `/lobby/${id}`,
+                            'id': id
+                        }
+                        
+                        socket.emit('enterLobbyResult', result, lobbys[i])
+
+                    }else{
+                        let result = {
+                            'msg': 'Não foi possivel entrar no lobby, \n a sala já esta em jogo ativo',
+                            'stats': 'error',
+                        }
+                        socket.emit('enterLobbyResult', result)
                     }
-                    
-                    socket.emit('enterLobbyResult', result, lobbys[i])
                 }
                 lobby = [lobbys[i]]
                 i = lobbys.length
@@ -239,28 +249,11 @@ io.on('connection', socket => {
         }
     })
 
-
-    // recebe um alerta que o usuario saiu da janela, envia um evento para verificar se o usuario fechou a janela ou se abriu outra aba no lugar
-    // se fechou a janela ira retornar false e o usuario sera desconectado do jogo
-    socket.on('CloseAlert', function(userInfo, GameId){ 
-        var response = false
-        console.log("Verificando conexão")
-        socket.emit('CloseAlertValidation', 'oi ta ai?') // envia o evento de verificação
-        socket.on('CloseAlertValidation', function(data){ // recebe um evento de confirmação
-            response = true
-        })
-
-        setTimeout(function(){ // verifica se o usuario respondeu ou não
-            if(response === false){
-                discontentGame(userInfo, GameId)
-            }   
-        },2000)
-    })
-    socket.on('discontentGame', function(userInfo, GameId){
-        discontentGame(userInfo, GameId)
+    socket.on('disconnectGame', function(userInfo, GameId){ // recebe um evento do usuario saindo do lobby
+        disconnectGame(userInfo, GameId)
     })
 
-    function discontentGame(userInfo, GameId){
+    function disconnectGame(userInfo, GameId){ // remove o usuario do lobby
         var user = userInfo
         var id = GameId
         var i = 0
@@ -321,6 +314,7 @@ io.on('connection', socket => {
         }
         console.log('Usuario fechou a janela ou perdeu conexão com a internet!')
     }
+
 
 
 
