@@ -37,10 +37,37 @@
 <script type="text/javascript">
     var root = document.getElementById('root')
 
-    socket.on('serverOn', function(id){ // pegando socket id e salvando no sessionStorage
-            window.sessionStorage.setItem('id', id)
-    })
+   
 
+    socket.on('serverOn', function(id){ // pegando socket id e salvando no sessionStorage
+        if(window.sessionStorage.getItem('id').length === 0){
+            window.sessionStorage.setItem('id', id)
+        }
+    })
+    
+    if(window.sessionStorage.getItem("stats") === "inGame"){
+        socket.emit('GameValidation', window.sessionStorage.getItem('gameId'), window.sessionStorage.getItem('id'), (response) => {
+            console.log(response.msg)
+            if(response.stats === 'NotFound' || response.stats === 'inGameNotPlayer'){
+                window.sessionStorage.setItem("stats", 'menu')
+                window.sessionStorage.setItem("gameId", '????')
+            }else{
+                if(confirm("Parece que você esta na lista de um lobby existente! \n deseja voltar ao lobby?")){
+                    window.location = `/lobby/${window.sessionStorage.getItem('gameId')}`
+                }else{
+                    var user = {
+                        'name': window.sessionStorage.getItem('name'),
+                        'icon': window.sessionStorage.getItem('icon'),
+                        'id': window.sessionStorage.getItem('id'),
+                    }                   
+                    socket.emit('disconnectGame', user, window.sessionStorage.getItem('gameId'))
+                }
+            }
+        })
+    }else{
+        window.sessionStorage.setItem("stats", 'menu')
+        window.sessionStorage.setItem("gameId", '????')
+    }
 
     window.sessionStorage.setItem('icon', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT0HiL12B0fE93aJO4ZNmaKNGD1VeihR_mBng&usqp=CAU')
     var IconSelect = 1

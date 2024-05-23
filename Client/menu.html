@@ -164,10 +164,34 @@
 
 </style>
 <script type="text/javascript">
-    window.sessionStorage.setItem("stats", 'menu')
-    window.sessionStorage.setItem("gameId", '????')
-    var socket = io('http://localhost:3000')
+    var socket = io('http://localhost:3000') 
     var root = document.getElementById("rootSalas")
+
+
+
+    if(window.sessionStorage.getItem("stats") === "inGame"){
+        socket.emit('GameValidation', window.sessionStorage.getItem('gameId'), window.sessionStorage.getItem('id'), (response) => {
+            console.log(response.msg)
+            if(response.stats === 'NotFound' || response.stats === 'inGameNotPlayer'){
+                window.sessionStorage.setItem("stats", 'menu')
+                window.sessionStorage.setItem("gameId", '????')
+            }else{
+                if(confirm("Parece que você esta na lista de um lobby existente! \n deseja voltar ao lobby?")){
+                    window.location = `/lobby/${window.sessionStorage.getItem('gameId')}`
+                }else{
+                    var user = {
+                        'name': window.sessionStorage.getItem('name'),
+                        'icon': window.sessionStorage.getItem('icon'),
+                        'id': window.sessionStorage.getItem('id'),
+                    }                   
+                    socket.emit('disconnectGame', user, window.sessionStorage.getItem('gameId'))
+                }
+            }
+        })
+    }else{
+        window.sessionStorage.setItem("stats", 'menu')
+        window.sessionStorage.setItem("gameId", '????')
+    }
 
 
     socket.emit('lobbysRequest', 'lobbys') // faz o request para o servidor enviar os lobbys publicos 
@@ -248,14 +272,15 @@
         socket.emit("createLobby", lobby, user)
     }
     
-    socket.on('createLobbyResult', function(result){ // recebendo o resultado do request para criar um novo lobby
+    socket.on('createLobbyResult', function(result, lobby){ // recebendo o resultado do request para criar um novo lobby
+        window.sessionStorage.setItem("stats", 'inGame')
+        window.sessionStorage.setItem("gameId", result.lobbyId)
         alert(result.msg)
         window.location = `/lobby/${result.lobbyId}`
     })
   
     socket.on('enterLobbyResult', function(result, lobby){
         alert(result.msg)
-
         if(result.stats === 'sucess'){
             window.sessionStorage.setItem('gameId', result.id)
             window.sessionStorage.setItem('stats', 'inGame')
