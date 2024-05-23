@@ -58,9 +58,6 @@
         socket.emit('CloseAlert', user, gameId)
     }
     socket.on("CloseAlertValidation", function(data){
-        setTimeout(function(){
-            socket.emit('CloseAlertValidation', 'ola?')
-        },1000)
         console.log(data.id === user.id)
         if(data.id === user.id){
             socket.emit('CloseAlertValidation', user.id)
@@ -69,16 +66,74 @@
 
 
 
-    function discontentGame(){
     function disconnectGame(){
         if (confirm('Sair do lobby?') == true) {
-            socket.emit("discontentGame", user, gameId)
             socket.emit("disconnectGame", user, gameId)
             window.location = '/menu/'
         } 
     }
+    function notification(type, data){
+        let soundEffect = new Audio('/system-notification.mp3');
+        switch(type){
+            case 'newUser':
+                soundEffect = new Audio('/sounds/new-player.mp3')
+                document.title = 'New user - UNO'
+                setTimeout(function(){
+                    document.title = 'LOBBY - UNO'
+                },1500)
+            break;
+            case 'leaveUser':
+                soundEffect = new Audio('/sounds/leave-player.mp3')
+                document.title = 'leave player :c - UNO'
+                setTimeout(function(){
+                    document.title = 'LOBBY - UNO'
+                },1500)
+            break;
+            case 'yourTurn':
+                soundEffect = new Audio('/sounds/your-turn.mp3')
+                document.title = 'SUA VEZ! - UNO'
+                setTimeout(function(){
+                    document.title = 'LOBBY - UNO'
+                },2500)
+            break;
+            case 'specialCard':
+                soundEffect = new Audio('/sounds/special-card.mp3')
+            break;
+            case 'jumpTurn':
+                soundEffect = new Audio('/sounds/your-turn.mp3')
+                document.title = 'Pulou todo mudno! - UNO'
+                setTimeout(function(){
+                    document.title = 'LOBBY - UNO'
+                },2500)
+            break;
+            case 'blockTurn':
+                soundEffect = new Audio('/sounds/jump-turn.mp3')
+                document.title = 'NAME bloqueou você! - UNO'
+                setTimeout(function(){
+                    document.title = 'LOBBY - UNO'
+                },2500)
+            break;
+            default: 
+                soundEffect = new Audio('/sounds/game-bonus.mp3')
+                document.title = 'game bonus - UNO'
+                setTimeout(function(){
+                    document.title = 'LOBBY - UNO'
+                },2500)
+            break;
+        }
+        soundEffect.volume = 0.2;
+        soundEffect.play();
+    }
+
 
 </script>
 </html>
 
-<button onclick="discontentGame()">Sair do lobby</button>
+<button onclick="disconnectGame()">Sair do lobby</button>
+<button onclick="notification('newUser')">New user in lobby - notification</button>
+<button onclick="notification('leaveUser')">leave one user lobby - notification</button>
+<button onclick="notification('yourTurn')">your turn to play lobby - notification</button>
+<button onclick="notification('specialCard')">special letter in game - notification</button>
+<button onclick="notification('jumpTurn')">jump you | jump all turns- notification</button>
+<button onclick="notification('blockTurn')"> block you | block next palyer - notification</button>
+<button onclick="notification('')">game bonus- notification</button>
