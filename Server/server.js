@@ -360,6 +360,12 @@ io.on('connection', socket => {
         }
     })
 
+    socket.on('enterLobbyConfirm', function(gameId, user){
+        socket.join(gameId);
+        socket.to(gameId).emit('newUser', user )
+    })
+
+
 
 
     
