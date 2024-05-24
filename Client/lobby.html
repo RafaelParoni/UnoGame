@@ -130,10 +130,19 @@
         soundEffect.play();
     }
 
+    socket.on('newUser', function(user){
+        console.log(`New user: ${user.name}, id: ${user.id}`)
+        notification('newUser')
+    })
+
+    socket.on('leaveUser', function(user){
+        console.log(`${user.name} acabou de sair do lobby :c`)
+        notification('leaveUser')
+    })
 
 </script>
 </html>
-
+<button onclick="teste()">TESTE</button>
 <button onclick="disconnectGame()">Sair do lobby</button>
 <button onclick="notification('newUser')">New user in lobby - notification</button>
 <button onclick="notification('leaveUser')">leave one user lobby - notification</button>
