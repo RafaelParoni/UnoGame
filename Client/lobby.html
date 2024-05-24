@@ -71,9 +71,12 @@
     function disconnectGame(){
         if (confirm('Sair do lobby?') == true) {
             socket.emit("disconnectGame", user, gameId)
+            window.sessionStorage.setItem("gameId", '????')
+            window.sessionStorage.setItem("stats", 'menu')
             window.location = '/menu/'
         } 
     }
+   
     function notification(type, data){
         let soundEffect = new Audio('/system-notification.mp3');
         switch(type){
