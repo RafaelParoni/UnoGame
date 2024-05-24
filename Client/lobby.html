@@ -40,33 +40,6 @@
         }
     })
 
-    var hidden, visibilityChange;
-    if(typeof document.hidden !== "undefined") {
-        hidden = "hidden";
-        visibilityChange = "visibilitychange";
-    }else if(typeof document.mozHidden !== "undefined") {
-        hidden = "mozHidden";
-        visibilityChange = "mozvisibilitychange";
-    }else if(typeof document.msHidden !== "undefined") {
-        hidden = "msHidden";
-        visibilityChange = "msvisibilitychange";
-    }else if(typeof document.webkitHidden !== "undefined") {
-        hidden = "webkitHidden";
-        visibilityChange = "webkitvisibilitychange";
-    }
-    document.addEventListener(visibilityChange, closePage, false);
-
-    function closePage() {
-        socket.emit('CloseAlert', user, gameId)
-    }
-    socket.on("CloseAlertValidation", function(data){
-        console.log(data.id === user.id)
-        if(data.id === user.id){
-            socket.emit('CloseAlertValidation', user.id)
-        }
-    })
-
-
 
     function disconnectGame(){
         if (confirm('Sair do lobby?') == true) {
@@ -142,7 +115,6 @@
 
 </script>
 </html>
-<button onclick="teste()">TESTE</button>
 <button onclick="disconnectGame()">Sair do lobby</button>
 <button onclick="notification('newUser')">New user in lobby - notification</button>
 <button onclick="notification('leaveUser')">leave one user lobby - notification</button>
