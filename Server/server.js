@@ -312,7 +312,9 @@ io.on('connection', socket => {
             }
             i++
         }
-        console.log('Usuario fechou a janela ou perdeu conexão com a internet!')
+
+        socket.leave(GameId)
+        socket.to(GameId).emit('leaveUser', user)
     }
 
 
