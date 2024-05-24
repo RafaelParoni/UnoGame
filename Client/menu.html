@@ -163,9 +163,16 @@
     }
 
 </style>
+</html>
 <script type="text/javascript">
     var socket = io('http://localhost:3000') 
     var root = document.getElementById("rootSalas")
+
+    var user = {
+            'name': window.sessionStorage.getItem('name'),
+            'id': window.sessionStorage.getItem('id'),
+            'icon': window.sessionStorage.getItem('icon'),
+        }
 
 
 
@@ -196,27 +203,20 @@
 
     socket.emit('lobbysRequest', 'lobbys') // faz o request para o servidor enviar os lobbys publicos 
     socket.on('lobbysResult', function(salas){ // recebe o resultado do requestes com a lista dos lobbys e mostrar na tela do usuario
-        var user = {
-            'name': window.sessionStorage.getItem('name'),
-            'id': window.sessionStorage.getItem('id'),
-            'icon': window.sessionStorage.getItem('icon'),
-        }
         var i = 0 
         while(i < salas.length){
-            var id = salas[i].id
+            var id = `${salas[i].id}`
             var div = document.createElement("button");
             div.className = `class`
-            div.onclick = function(){
-                socket.emit('enterLobby', id, user)
-            }
-            div.id = id
+            div.setAttribute('onclick', `enterGame('${id}')`)
             div.innerHTML = `<span>${salas[i].lang}</span><span style="width: 100%; justify-content: left;"> ${salas[i].name} </span><span style="width: 45px; ">${salas[i].players.length}/${salas[i].maxPlayers}</span>`;
             root.appendChild(div); 
             
             i++
         }   
     })
-    
+
+
     socket.on('newLobby',  function(lobby){ // recebe um alert de que a um novo lobby na lista e adiciona ele a tela do usuario
         var user = {
             'name': window.sessionStorage.getItem('name'),
@@ -226,13 +226,15 @@
         var id = lobby.id
         var div = document.createElement("button");
             div.className = `class`
-            div.onclick = function(){
-                socket.emit('enterLobby', lobby.id, user)
-            }
+            div.setAttribute('onclick', `enterGame('${id}')`)
             div.id = id
             div.innerHTML = `<span>${lobby.lang}</span><span style="width: 100%; justify-content: left;"> ${lobby.name} </span><span style="width: 45px; ">${lobby.players.length}/${lobby.maxPlayers}</span>`;
             root.appendChild(div); 
     })
+
+    function enterGame(gameId){
+        socket.emit('enterLobby', gameId, user)
+    }
     
     function createLobby(){ // verificando credencias e fazendo o request com o servidor para criar o lobby
         var lobbyName = document.getElementById("clName").value
@@ -321,4 +323,3 @@
   
  
 </script>
-</html>
