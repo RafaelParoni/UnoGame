@@ -14,6 +14,7 @@
 <script>
     var socket = io('http://localhost:3000')
 
+
     var user = {
         'name': window.sessionStorage.getItem('name'),
         'icon': window.sessionStorage.getItem('icon'),
@@ -35,6 +36,7 @@
             window.location = '/menu/'
         }else{
             console.log(result.msg)
+            socket.emit("enterLobbyConfirm", gameId, user)
         }
     })
 
