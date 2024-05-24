@@ -9,10 +9,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
 </head>
 <body>
-    <h1>Lobby Uno</h1>
+    <main>
+        <h1 id="teste">lobby</h1>
+    </main>
 </body>
 <script>
     var socket = io('http://localhost:3000')
+    var lobby = {
+        'name': '',
+        'maxPlayers': 0,
+        'lang': '',
+        'id': '',
+        'publicLobby': '',
+        'stats': 'lobby',
+    }
+    var players = []
 
 
     var user = {
@@ -41,6 +52,27 @@
     })
 
 
+    socket.emit('lobbyInfoRequest', gameId)
+
+    socket.on('lobbyInfoResult', function(info){
+        var lobby = {
+            'name': info.name,
+            'maxPlayers': info.maxPlayers,
+            'lang': info.lang,
+            'id': info.id,
+            'publicLobby': info.publicLobby,
+            'stats': 'lobby',
+        }
+        var players = [
+            info.players
+        ]
+        
+        listPlayerDisplay(lobby, players)
+    })
+
+    function listPlayerDisplay(lobby, players){ // função responsável por cuidar do display da lista de players no lobby 
+        document.getElementById('teste').innerHTML = lobby.name
+    }
     function disconnectGame(){
         if (confirm('Sair do lobby?') == true) {
             socket.emit("disconnectGame", user, gameId)

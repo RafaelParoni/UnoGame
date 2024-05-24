@@ -205,6 +205,22 @@ io.on('connection', socket => {
         }
     })
 
+    socket.on('enterLobbyConfirm', function(gameId, user){
+        socket.join(gameId);
+        socket.to(gameId).emit('newUser', user )
+    })
+
+    socket.on("lobbyInfoRequest", function(id){
+        var i = 0
+        while(i < lobbys.length){
+            if(lobbys[i].id === id){
+                socket.emit('lobbyInfoResult', lobbys[i])
+                socket.to(id).emit('lobbyInfoResult', lobbys[i] )
+            }
+            i++
+        }
+    })
+
     socket.on('userValidation', function(gameId, user){ // recebe a solicitação de verificação do usuario que acabou de entrar no lobby
         var result = {}
         var i = 0
@@ -256,10 +272,12 @@ io.on('connection', socket => {
     function disconnectGame(userInfo, GameId){ // remove o usuario do lobby
         var user = userInfo
         var id = GameId
+        var lobbyInfo = []
         var i = 0
         while(i < lobbys.length){
             if(id === lobbys[i].id){
                 console.log('lOBBY: ' + lobbys[i].id)
+                lobbyInfo = lobbys[i]
 
                 if(lobbys[i].players.length === 1){
                     console.log("Ultimo user do lobby, FECHANDO LOBBY")
@@ -315,6 +333,7 @@ io.on('connection', socket => {
 
         socket.leave(GameId)
         socket.to(GameId).emit('leaveUser', user)
+        socket.to(GameId).emit('lobbyInfoResult', lobbyInfo)
     }
 
 
@@ -360,10 +379,7 @@ io.on('connection', socket => {
         }
     })
 
-    socket.on('enterLobbyConfirm', function(gameId, user){
-        socket.join(gameId);
-        socket.to(gameId).emit('newUser', user )
-    })
+   
 
 
 
