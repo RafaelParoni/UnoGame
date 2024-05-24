@@ -40,7 +40,7 @@
    
 
     socket.on('serverOn', function(id){ // pegando socket id e salvando no sessionStorage
-        if(window.sessionStorage.getItem('id').length === 0){
+        if( window.sessionStorage.getItem("id") === null || window.sessionStorage.getItem('id') === undefined){
             window.sessionStorage.setItem('id', id)
         }
     })
